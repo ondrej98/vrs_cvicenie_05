@@ -101,14 +101,14 @@ int main(void) {
 
 		/* USER CODE BEGIN 3 */
 		if (switch_state) {
-			GPIOA->BSRR |= (GPIO_BSRR_BS_4);
+			LL_GPIO_SetOutputPin(LED_GPIO_Port, LED_Pin)
 			for (uint16_t i = 0; i < 0xFF00; i++) {
 			}
-			GPIOA->BRR |= (GPIO_BRR_BR_4);
+			LL_GPIO_ResetOutputPin(LED_GPIO_Port, LED_Pin);
 			for (uint16_t i = 0; i < 0xFF00; i++) {
 			}
 		} else {
-			GPIOA->BRR |= (GPIO_BRR_BR_4);
+			LL_GPIO_ResetOutputPin(LED_GPIO_Port, LED_Pin);
 		}
 		LL_mDelay(1);
 	}
@@ -149,7 +149,7 @@ uint8_t checkButtonState(GPIO_TypeDef *PORT, uint8_t PIN, uint8_t edge,
 	//type your code for "checkButtonState" implementation here:
 	uint8_t button_state = 0, timeout = 0;
 	while (timeout < samples_window) {
-		if (!(PORT->IDR & (1 << PIN))) {
+		if (!(LL_GPIO_ReadInputPort(PORT) & (1 << PIN))) {
 			button_state += 1;
 		} else {
 			//button_state = 0;
